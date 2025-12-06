@@ -1,0 +1,2673 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quality KPI Dashboard – Futuristic</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Police futuriste -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-main: #050712;
+      --bg-elevated: rgba(10, 14, 40, 0.9);
+      --bg-elevated-soft: rgba(15, 20, 60, 0.85);
+      --accent-primary: #35c6ff;
+      --accent-secondary: #7b61ff;
+      --accent-danger: #ff4e8a;
+      --accent-success: #41f3a3;
+      --border-glow: rgba(53, 198, 255, 0.35);
+      --text-main: #f5f7ff;
+      --text-muted: #9ca6d6;
+      --card-radius: 18px;
+      --shadow-soft: 0 0 35px rgba(0, 0, 0, 0.55);
+      --glass-blur: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at top, #101735 0, #050712 45%, #020309 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    /* ====== LAYOUT GLOBAL ====== */
+
+    .sidebar {
+      width: 260px;
+      background: linear-gradient(180deg, #060719 0%, #050510 40%, #03030a 100%);
+      border-right: 1px solid rgba(90, 112, 255, 0.25);
+      box-shadow: 0 0 35px rgba(0, 0, 0, 0.7);
+      padding: 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #35c6ff, #7b61ff);
+      box-shadow: 0 0 18px rgba(59, 174, 255, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Orbitron", monospace;
+      font-weight: 700;
+      font-size: 18px;
+      color: #050712;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-text h1 {
+      font-family: "Orbitron", monospace;
+      font-size: 16px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand-text span {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .sidebar-section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .nav-item {
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item span.label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-item span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      box-shadow: 0 0 8px rgba(53, 198, 255, 0.85);
+    }
+
+    .nav-item.active,
+    .nav-item:hover {
+      background: radial-gradient(circle at top left, rgba(53, 198, 255, 0.22), rgba(88, 65, 255, 0.06));
+      color: var(--text-main);
+      border-color: var(--border-glow);
+      box-shadow: 0 0 18px rgba(53, 198, 255, 0.25);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      font-size: 11px;
+      color: var(--text-muted);
+      opacity: 0.85;
+    }
+
+    .sidebar-footer strong {
+      color: var(--accent-primary);
+      font-weight: 500;
+    }
+
+    /* ====== MAIN CONTENT ====== */
+
+    .main {
+      flex: 1;
+      padding: 22px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .title-block h2 {
+      font-family: "Orbitron", monospace;
+      font-size: 22px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .title-block .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-live {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(65, 243, 163, 0.06);
+      color: var(--accent-success);
+      border: 1px solid rgba(65, 243, 163, 0.7);
+      box-shadow: 0 0 14px rgba(65, 243, 163, 0.7);
+    }
+
+    .actions-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-ghost,
+    .btn-primary {
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 12px;
+      border: 1px solid rgba(92, 118, 255, 0.45);
+      background: radial-gradient(circle at top left, rgba(92, 118, 255, 0.25), rgba(5, 7, 18, 0.9));
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 18px rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(10px);
+      transition: all 0.18s ease;
+    }
+
+    .btn-primary {
+      border-color: rgba(53, 198, 255, 0.85);
+      background: linear-gradient(120deg, #35c6ff, #7b61ff);
+      color: #050712;
+      font-weight: 600;
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(53, 198, 255, 0.6);
+      box-shadow: 0 0 18px rgba(53, 198, 255, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 22px rgba(123, 97, 255, 0.65);
+      transform: translateY(-1px);
+    }
+
+    /* ====== BARRE DE FILTRES ====== */
+
+    .filters-panel {
+      border-radius: var(--card-radius);
+      background: radial-gradient(circle at top left, rgba(53, 198, 255, 0.18), rgba(5, 7, 22, 0.96));
+      border: 1px solid rgba(86, 118, 255, 0.45);
+      box-shadow: var(--shadow-soft);
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+      backdrop-filter: blur(var(--glass-blur));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .filters-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 110% -10%, rgba(123, 97, 255, 0.55) 0, transparent 55%),
+                  radial-gradient(circle at -10% 120%, rgba(53, 198, 255, 0.33) 0, transparent 52%);
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .filters-panel-inner {
+      position: relative;
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      z-index: 1;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .filter-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #ccd4ff;
+    }
+
+    .filter-hint {
+      font-size: 10px;
+      color: var(--text-muted);
+      opacity: 0.9;
+    }
+
+    .filter-control {
+      position: relative;
+    }
+
+    .filter-control select,
+    .filter-control input {
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(143, 159, 255, 0.7);
+      background: radial-gradient(circle at top, rgba(12, 18, 45, 0.96), rgba(2, 4, 18, 0.98));
+      color: var(--text-main);
+      font-size: 12px;
+      outline: none;
+      box-shadow: 0 0 15px rgba(11, 19, 48, 0.8);
+      appearance: none;
+    }
+
+    .filter-control select:focus,
+    .filter-control input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 20px rgba(53, 198, 255, 0.55);
+    }
+
+    .filter-control .chevron {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .filters-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .btn-chip {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(86, 118, 255, 0.8);
+      background: rgba(5, 8, 32, 0.9);
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 0 14px rgba(0, 0, 0, 0.65);
+      transition: all 0.18s ease;
+    }
+
+    .btn-chip span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+    }
+
+    .btn-chip:hover {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 16px rgba(53, 198, 255, 0.5);
+    }
+
+    /* ====== KPIs GRID ====== */
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    @media (max-width: 1400px) {
+      .kpi-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 960px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .kpi-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .kpi-card {
+      position: relative;
+      border-radius: var(--card-radius);
+      background: radial-gradient(circle at top left, rgba(53, 198, 255, 0.14), rgba(5, 8, 28, 0.96));
+      border: 1px solid rgba(88, 115, 255, 0.5);
+      box-shadow: var(--shadow-soft);
+      padding: 10px 10px 12px;
+      overflow: hidden;
+      backdrop-filter: blur(var(--glass-blur));
+    }
+
+    .kpi-card::after {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at 0 0, rgba(123, 97, 255, 0.15) 0, transparent 45%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .kpi-header {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 6px;
+      margin-bottom: 6px;
+      z-index: 1;
+    }
+
+    .kpi-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #dde3ff;
+    }
+
+    .kpi-tag {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(143, 159, 255, 0.7);
+      color: var(--text-muted);
+      backdrop-filter: blur(8px);
+      background: rgba(12, 16, 52, 0.9);
+    }
+
+    .kpi-value-row {
+      position: relative;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 6px;
+      z-index: 1;
+    }
+
+    .kpi-value {
+      font-family: "Orbitron", monospace;
+      font-size: 18px;
+    }
+
+    .kpi-unit {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .kpi-trend {
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .trend-up {
+      color: var(--accent-success);
+    }
+
+    .trend-down {
+      color: var(--accent-danger);
+    }
+
+    .kpi-foot {
+      position: relative;
+      margin-top: 4px;
+      font-size: 10px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1;
+    }
+
+    .kpi-foot span.label {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 9px;
+    }
+
+    .kpi-foot span.value {
+      font-size: 10px;
+    }
+
+    /* ====== GRAPHIQUES & TABLEAUX ====== */
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 2.2fr 1.4fr;
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 1200px) {
+      .content-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      border-radius: var(--card-radius);
+      background: var(--bg-elevated);
+      border: 1px solid rgba(92, 118, 255, 0.5);
+      padding: 12px 14px;
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(var(--glass-blur));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at 0 0, rgba(53, 198, 255, 0.12) 0, transparent 50%);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .card-header {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+      z-index: 1;
+    }
+
+    .card-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #dde3ff;
+    }
+
+    .card-subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .pill {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(97, 126, 255, 0.7);
+      background: rgba(3, 7, 30, 0.9);
+      color: var(--text-muted);
+    }
+
+    .chart-placeholder {
+      position: relative;
+      height: 220px;
+      border-radius: calc(var(--card-radius) - 6px);
+      border: 1px dashed rgba(104, 132, 255, 0.5);
+      background: radial-gradient(circle at top, rgba(8, 14, 46, 0.95), rgba(5, 8, 28, 0.98));
+      box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 12px;
+      backdrop-filter: blur(10px);
+    }
+
+    .chart-placeholder span {
+      opacity: 0.9;
+    }
+
+    .table-wrapper {
+      position: relative;
+      max-height: 260px;
+      overflow: auto;
+      border-radius: calc(var(--card-radius) - 6px);
+      border: 1px solid rgba(66, 90, 216, 0.7);
+      background: radial-gradient(circle at top, rgba(5, 9, 36, 0.98), rgba(1, 3, 16, 0.98));
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.75);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      color: var(--text-main);
+    }
+
+    thead {
+      position: sticky;
+      top: 0;
+      background: linear-gradient(90deg, rgba(53, 198, 255, 0.15), rgba(27, 36, 91, 0.98));
+      backdrop-filter: blur(10px);
+      z-index: 2;
+    }
+
+    th,
+    td {
+      padding: 6px 10px;
+      white-space: nowrap;
+      border-bottom: 1px solid rgba(39, 52, 120, 0.8);
+    }
+
+    th {
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 10px;
+      color: #cbd4ff;
+      text-align: left;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: rgba(5, 10, 40, 0.85);
+    }
+
+    tbody tr:nth-child(even) {
+      background: rgba(5, 7, 28, 0.9);
+    }
+
+    tbody tr:hover {
+      background: rgba(35, 48, 120, 0.9);
+    }
+
+    .tag-wp {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(53, 198, 255, 0.12);
+      border: 1px solid rgba(53, 198, 255, 0.75);
+      color: var(--accent-primary);
+    }
+
+    /* ====== FOOTER INFO ====== */
+
+    .footer-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 10px;
+      color: var(--text-muted);
+      opacity: 0.95;
+    }
+
+    .footer-bar span strong {
+      color: var(--accent-primary);
+      font-weight: 500;
+    }
+
+    @media (max-width: 840px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        overflow-x: auto;
+      }
+
+      .sidebar-nav,
+      .sidebar-footer,
+      .sidebar-section-title {
+        display: none;
+      }
+
+      .main {
+        padding: 16px 14px 20px;
+      }
+
+      .filters-panel-inner {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .filters-panel-inner {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .main-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .actions-right {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+    }
+    /* ====== MODALE KPI MANUEL ====== */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 4, 18, 0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  backdrop-filter: blur(14px);
+}
+
+.modal-backdrop.open {
+  display: flex;
+}
+
+.modal-dialog {
+  width: 720px;
+  max-width: 95vw;
+  border-radius: 18px;
+  background: radial-gradient(circle at top left, rgba(53, 198, 255, 0.2), rgba(5, 7, 24, 0.98));
+  border: 1px solid rgba(92, 118, 255, 0.9);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.85);
+  padding: 14px 16px 16px;
+  color: var(--text-main);
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.modal-header h3 {
+  font-family: "Orbitron", monospace;
+  font-size: 16px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.modal-close {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.modal-close:hover {
+  color: var(--accent-primary);
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 720px) {
+  .modal-grid-3 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modal-field label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #cbd4ff;
+}
+
+.modal-field input,
+.modal-field select {
+  padding: 6px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(143, 159, 255, 0.9);
+  background: radial-gradient(circle at top, rgba(12, 18, 45, 0.96), rgba(2, 4, 18, 0.98));
+  color: var(--text-main);
+  font-size: 12px;
+  outline: none;
+  box-shadow: 0 0 15px rgba(11, 19, 48, 0.8);
+}
+
+.modal-field input:focus,
+.modal-field select:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 20px rgba(53, 198, 255, 0.65);
+}
+
+.modal-lock-row {
+  margin-top: 4px;
+}
+
+.checkbox-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.checkbox-label input[type="checkbox"] {
+  accent-color: var(--accent-primary);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+/* --- FIX AFFICHAGE DES KPI CARDS --- */
+.kpi-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 140px;          /* augmente la place verticale */
+  overflow: visible !important; /* évite que le bas soit coupé */
+}
+
+.kpi-card-header {
+  margin-bottom: 10px;
+}
+
+.kpi-card-main {
+  margin-bottom: 8px;
+}
+
+.kpi-card-footer,
+.kpi-meta,
+.kpi-card-meta {
+  font-size: 10px;
+  line-height: 1.3;
+  display: flex;
+  flex-wrap: wrap;            /* permet aux textes de passer à la ligne */
+  gap: 6px;
+  justify-content: space-between;
+  white-space: normal;        /* autorise les retours à la ligne */
+}
+
+.kpi-card-footer span,
+.kpi-meta span,
+.kpi-card-meta span {
+  display: block;
+}
+/* ===================================== */
+/* FIX VISUEL : coins supérieurs des KPI */
+/* ===================================== */
+
+/* le conteneur des cards KPI */
+.kpi-metrics-row {
+  overflow: visible !important;      /* ne coupe plus ce qui dépasse */
+  padding-right: 16px;               /* un peu d'air pour la dernière carte */
+}
+
+/* chaque card KPI elle-même */
+.kpi-card {
+  overflow: visible !important;      /* laisse apparaître le quart de cercle */
+}
+
+/* par sécurité, les éléments décoratifs dans la card */
+.kpi-card > * {
+  overflow: visible;
+}
+/* ===== Layout propre des en-têtes de KPI ===== */
+
+.kpi-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+/* Titre à gauche (SLA, BUGS K1, etc.) */
+.kpi-card-header-title {
+  flex: 0 0 auto;
+}
+
+/* Badge rond/pillule en haut à droite */
+.kpi-card-header-pill,
+.kpi-card-header span.kpi-pill,
+.kpi-card-header .kpi-pill {
+  flex: 0 0 auto;
+  max-width: 90px;          /* évite que le texte déborde */
+  font-size: 9px;
+  line-height: 1.1;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: normal;      /* autorise les retours à la ligne */
+  text-align: right;
+  box-sizing: border-box;
+}
+/* ============================= */
+/* PATCH SPÉCIFIQUE 3 KPI CENTRAUX */
+/* 5 : Delivery, 6 : Deviations, 7 : Escalations */
+/* ============================= */
+
+/* On s'assure que les cards sont bien des conteneurs */
+.kpi-metrics-row .kpi-card {
+  position: relative;
+}
+
+/* Pastille / quart de cercle en haut à droite de ces 3 cartes */
+.kpi-metrics-row .kpi-card:nth-child(5) .kpi-pill,
+.kpi-metrics-row .kpi-card:nth-child(6) .kpi-pill,
+.kpi-metrics-row .kpi-card:nth-child(7) .kpi-pill {
+  position: absolute;      /* bien ancrée dans la carte */
+  top: 8px;
+  right: 8px;
+  max-width: 80px;
+  font-size: 8px;
+  line-height: 1.1;
+  white-space: normal;     /* autorise le retour à la ligne */
+  z-index: 2;              /* passe devant le fond, pas derrière */
+  overflow: visible;
+}
+
+/* Un peu plus d'espace à droite pour ces cartes */
+.kpi-metrics-row .kpi-card:nth-child(5),
+.kpi-metrics-row .kpi-card:nth-child(6),
+.kpi-metrics-row .kpi-card:nth-child(7) {
+  padding-right: 14px;
+}
+/* =============== */
+/* Sidebar toggling */
+/* =============== */
+
+/* Bouton futuriste */
+.sidebar-toggle-btn {
+  position: fixed;
+  top: 20px;
+  left: 240px; /* aligné avec la fin de ta sidebar */
+  z-index: 2000;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sidebar.hidden + .sidebar-toggle-btn {
+  left: 20px !important;
+}
+
+/* Animation sidebar */
+.sidebar {
+  width: 220px;
+  transition: all 0.35s ease;
+}
+
+.sidebar.hidden {
+  transform: translateX(-240px);
+  opacity: 0;
+}
+
+/* Quand la sidebar est cachée, le dashboard prend toute la place */
+body.sidebar-hidden .main,
+body.sidebar-hidden main,
+body.sidebar-hidden .content,
+body.sidebar-hidden .page-content {
+  margin-left: 0 !important;
+  width: 100% !important;
+}
+/* ========================= */
+/* LAYOUT SIDEBAR + MAIN     */
+/* ========================= */
+
+/* Sidebar fixe sur la gauche */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 260px;             /* largeur de la sidebar */
+  z-index: 1000;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Contenu principal décalé de la sidebar */
+main.main {
+  margin-left: 260px;       /* même valeur que .sidebar width */
+  transition: margin-left 0.3s ease;
+}
+
+/* Bouton toggle */
+.sidebar-toggle-btn {
+  position: fixed;
+  top: 20px;
+  left: 280px;              /* un peu à droite de la sidebar */
+  z-index: 1100;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: left 0.3s ease, background 0.3s ease;
+}
+
+/* ========================= */
+/* ÉTAT "SIDEBAR MASQUÉE"    */
+/* ========================= */
+
+/* on cache la sidebar en la faisant glisser vers la gauche */
+body.sidebar-hidden .sidebar {
+  transform: translateX(-260px);
+  opacity: 0;
+}
+
+/* le main occupe toute la largeur */
+body.sidebar-hidden main.main {
+  margin-left: 0;
+}
+
+/* le bouton vient se coller à gauche quand la sidebar est cachée */
+body.sidebar-hidden .sidebar-toggle-btn {
+  left: 20px;
+}
+
+
+  </style>
+</head>
+
+<body>
+  <!-- SIDEBAR GAUCHE -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">QK</div>
+      <div class="brand-text">
+        <h1>Quality KPI Hub</h1>
+        <span>Project · Work Package · SLA</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="sidebar-section-title">Views</div>
+      <div class="sidebar-nav">
+        <div class="nav-item active">
+          <span class="label">
+            <span class="dot"></span> Global KPIs
+          </span>
+          <span>WP</span>
+        </div>
+        <div class="nav-item">
+          <span class="label">
+            <span class="dot"></span> SLA & Delivery
+          </span>
+          <span>SLA</span>
+        </div>
+        <div class="nav-item">
+          <span class="label">
+            <span class="dot"></span> Bugs & Risks
+          </span>
+          <span>BR</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      Designed for <strong>Quality Engineers</strong><br />
+      KPIs: SLA · Bugs K1/K2 · Risks · DCE · Maturity
+    </div>
+  </aside>
+<!-- BOUTON POUR MASQUER / AFFICHER LA SIDEBAR -->
+<button id="toggleSidebar" class="btn-ghost sidebar-toggle-btn">
+  ☰
+</button>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="main">
+    <!-- HEADER -->
+    <div class="main-header">
+      <div class="title-block">
+        <h2>Project Quality KPI Dashboard</h2>
+        <div class="subtitle">
+          Monitoring KPIs per Work Package, Month & Year
+          <span class="badge-live">Real Time Mode</span>
+        </div>
+      </div>
+      <div class="actions-right">
+  <button class="btn-ghost" id="btnOpenModalKpi"
+        disabled
+        style="opacity:0.4; cursor:not-allowed;"
+        title="Saisie manuelle désactivée temporairement">
+    ✚ Saisir KPI (WP / Mois)
+</button>
+
+  <button class="btn-ghost" id="btnImportExcel">
+    ⤓ Import Excel
+  </button>
+  <button class="btn-ghost" id="btnRefresh">
+    ⟳ Refresh View
+  </button>
+  <button class="btn-ghost" id="btnExportJson">
+    ⇩ Export JSON
+  </button>
+  <button class="btn-primary" id="btnExportExcel">
+    ⬇ Export Excel
+  </button>
+</div>
+
+
+
+    </div>
+
+    <!-- BARRE DE FILTRES -->
+    <section class="filters-panel">
+      <div class="filters-panel-inner">
+        <!-- Work Package -->
+        <div class="filter-group">
+          <div class="filter-label">Work Package</div>
+          <div class="filter-hint">Scope on a specific WP or all</div>
+          <div class="filter-control">
+            <select id="filterWP">
+              <option value="ALL">All Work Packages</option>
+              <option value="WP1">WP1 – Architecture & Design</option>
+              <option value="WP2">WP2 – Implementation</option>
+              <option value="WP3">WP3 – Validation & V&V</option>
+              <option value="WP4">WP4 – Quality & Audits</option>
+            </select>
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+
+        <!-- Année -->
+        <div class="filter-group">
+          <div class="filter-label">Year</div>
+          <div class="filter-hint">Filter KPI by year</div>
+          <div class="filter-control">
+            <select id="filterYear">
+              <option value="2025">2025</option>
+              <option value="2024">2024</option>
+              <option value="2023">2023</option>
+            </select>
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+
+        <!-- Mois -->
+        <div class="filter-group">
+          <div class="filter-label">Month</div>
+          <div class="filter-hint">Select single month</div>
+          <div class="filter-control">
+            <input type="month" id="filterMonth" />
+          </div>
+        </div>
+
+        <!-- Mode KPI -->
+        <div class="filter-group">
+          <div class="filter-label">KPI Source</div>
+          <div class="filter-hint">Excel or manual input</div>
+          <div class="filter-control">
+            <select id="filterMode">
+              <option value="excel">Calculated from Excel</option>
+              <option value="manual">Manual per month</option>
+            </select>
+            <span class="chevron">▼</span>
+          </div>
+        </div>
+
+        <!-- Actions filtres -->
+        <div class="filters-actions">
+          <button class="btn-chip">
+            <span class="dot"></span> Apply Filters
+          </button>
+          <button class="btn-chip" style="border-color: rgba(220, 53, 69, 0.85); color: #ff9fb6;">
+            ✕ Reset
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- KPIs PRINCIPAUX -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <div class="kpi-title">SLA</div>
+          <div class="kpi-tag">Cost</div>
+        </div>
+        <div class="kpi-value-row">
+          <div class="kpi-value" id="kpiSLA">–</div>
+          <div class="kpi-unit">%</div>
+        </div>
+        <div class="kpi-foot">
+          <span class="label">Target</span>
+          <span class="value">&gt; 98%</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <div class="kpi-title">Bugs K1</div>
+          <div class="kpi-tag">Quality</div>
+        </div>
+        <div class="kpi-value-row">
+          <div class="kpi-value" id="kpiBugsK1">–</div>
+          <div class="kpi-unit">Quality</div>
+        </div>
+        <div class="kpi-foot">
+          <span class="label">Objective</span>
+          <span class="value">0 blocking</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <div class="kpi-title">Bugs K2</div>
+          <div class="kpi-tag">Quality</div>
+        </div>
+        <div class="kpi-value-row">
+          <div class="kpi-value" id="kpiBugsK2">–</div>
+          <div class="kpi-unit">Quality</div>
+        </div>
+        <div class="kpi-foot">
+          <span class="label">Trend</span>
+          <span class="value">To be reduced</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <div class="kpi-title">Risks</div>
+          <div class="kpi-tag">Quality</div>
+        </div>
+        <div class="kpi-value-row">
+          <div class="kpi-value" id="kpiRisks">–</div>
+          <div class="kpi-unit">Open</div>
+        </div>
+        <div class="kpi-foot">
+          <span class="label">Criticality</span>
+          <span class="value">Monitored</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <div class="kpi-title">Delivery</div>
+          <div class="kpi-tag">Delay</div>
+        </div>
+        <div class="kpi-value-row">
+          <div class="kpi-value" id="kpiDeliveryCompliance">–</div>
+          <div class="kpi-unit">%</div>
+        </div>
+        <div class="kpi-foot">
+          <span class="label">Target</span>
+          <span class="value">&gt; 95%</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <div class="kpi-title">Nbre of Deviation</div>
+          <div class="kpi-tag">Quality</div>
+        </div>
+        <div class="kpi-value-row">
+          <div class="kpi-value" id="kpiDeviations">–</div>
+          <div class="kpi-unit">Open</div>
+        </div>
+        <div class="kpi-foot">
+          <span class="label">Goal</span>
+          <span class="value">&le; 1</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <div class="kpi-title">Nbre of Escal</div>
+          <div class="kpi-tag">Quality</div>
+        </div>
+        <div class="kpi-value-row">
+          <div class="kpi-value" id="kpiEscalations">–</div>
+          <div class="kpi-unit">Open</div>
+        </div>
+        <div class="kpi-foot">
+          <span class="label">Status</span>
+          <span class="value">&le; 1</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <div class="kpi-title">DCE</div>
+          <div class="kpi-tag">Delay</div>
+        </div>
+        <div class="kpi-value-row">
+          <div class="kpi-value" id="kpiDCE">–</div>
+          <div class="kpi-unit">%</div>
+        </div>
+        <div class="kpi-foot">
+          <span class="label">Objective</span>
+          <span class="value">&le; 10%</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-header">
+          <div class="kpi-title">Maturity</div>
+          <div class="kpi-tag">Process</div>
+        </div>
+        <div class="kpi-value-row">
+          <div class="kpi-value" id="kpiMaturity">–</div>
+          <div class="kpi-unit">%</div>
+        </div>
+        <div class="kpi-foot">
+          <span class="label">Target</span>
+          <span class="value">Toward CL2/CL3</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTENU GRAPHIQUES + TABLEAU -->
+    <section class="content-grid">
+      <!-- GRAPHIQUES -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">KPI Evolution</div>
+            <div class="card-subtitle">SLA · Delivery · DCE · Maturity vs Time</div>
+          </div>
+          <span class="pill">Time Series</span>
+        </div>
+        <div class="chart-placeholder">
+  <canvas id="chartKpiEvolution"></canvas>
+</div>
+
+      </div>
+
+      <!-- TABLEAU WP -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">WP Focus</div>
+            <div class="card-subtitle">Current KPIs per Work Package</div>
+          </div>
+          <span class="pill">Table · Detail</span>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>WP</th>
+                <th>Month</th>
+                <th>Year</th>
+                <th>SLA</th>
+                <th>Bugs K1</th>
+                <th>Bugs K2</th>
+                <th>Risks</th>
+                <th>DCE</th>
+                <th>Maturity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Lignes d'exemple statiques pour le design -->
+              <tr>
+                <td><span class="tag-wp">WP1</span></td>
+                <td>01</td>
+                <td>2025</td>
+                <td>99.2%</td>
+                <td>0</td>
+                <td>3</td>
+                <td>1</td>
+                <td>93%</td>
+                <td>82%</td>
+              </tr>
+              <tr>
+                <td><span class="tag-wp">WP2</span></td>
+                <td>01</td>
+                <td>2025</td>
+                <td>97.5%</td>
+                <td>1</td>
+                <td>6</td>
+                <td>2</td>
+                <td>88%</td>
+                <td>76%</td>
+              </tr>
+              <tr>
+                <td><span class="tag-wp">WP3</span></td>
+                <td>01</td>
+                <td>2025</td>
+                <td>98.1%</td>
+                <td>0</td>
+                <td>2</td>
+                <td>0</td>
+                <td>95%</td>
+                <td>84%</td>
+              </tr>
+              <tr>
+                <td><span class="tag-wp">WP4</span></td>
+                <td>01</td>
+                <td>2025</td>
+                <td>99.8%</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>97%</td>
+                <td>90%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <div class="footer-bar">
+      <span>Last refresh: <strong>not yet initialized</strong></span>
+      <span>Filters: Work Package · Month · Year · KPI Source</span>
+    </div>
+  </main>
+<!-- MODALE SAISIE MANUELLE KPI -->
+<div class="modal-backdrop" id="modalKpi">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3>Saisie manuelle des KPI</h3>
+      <button type="button" class="modal-close" id="btnCloseModalKpi">×</button>
+    </div>
+
+    <form id="modalKpiForm" class="modal-body">
+      <!-- Ligne WP / Année / Mois -->
+      <div class="modal-grid-3">
+        <div class="modal-field">
+          <label for="kpiWp">Work Package</label>
+          <select id="kpiWp" required>
+            <option value="">-- Sélectionner --</option>
+            <option value="WP1">WP1 – Architecture & Design</option>
+            <option value="WP2">WP2 – Implementation</option>
+            <option value="WP3">WP3 – Validation & V&V</option>
+            <option value="WP4">WP4 – Quality & Audits</option>
+          </select>
+        </div>
+
+        <div class="modal-field">
+          <label for="kpiYear">Année</label>
+          <input type="number" id="kpiYear" min="2000" max="2100" required />
+        </div>
+
+        <div class="modal-field">
+  <label for="kpiMonth">Mois</label>
+  <input
+    type="number"
+    id="kpiMonth"
+    min="1"
+    max="12"
+    placeholder="1-12"
+    required
+  />
+</div>
+
+
+      <!-- Ligne KPI 1 -->
+      <div class="modal-grid-3">
+        <div class="modal-field">
+          <label for="kpiSla">SLA (%)</label>
+          <input type="number" id="kpiSla" min="0" max="100" step="0.1" />
+        </div>
+        <div class="modal-field">
+          <label for="kpiBugsK1">Bugs K1 (nb)</label>
+          <input type="number" id="kpiBugsK1" min="0" step="1" />
+        </div>
+        <div class="modal-field">
+          <label for="kpiBugsK2">Bugs K2 (nb)</label>
+          <input type="number" id="kpiBugsK2" min="0" step="1" />
+        </div>
+      </div>
+
+      <!-- Ligne KPI 2 -->
+      <div class="modal-grid-3">
+        <div class="modal-field">
+          <label for="kpiRisks">Risks (nb)</label>
+          <input type="number" id="kpiRisks" min="0" step="1" />
+        </div>
+        <div class="modal-field">
+          <label for="kpiDelivery">Delivery Compliance (%)</label>
+          <input type="number" id="kpiDelivery" min="0" max="100" step="0.1" />
+        </div>
+        <div class="modal-field">
+          <label for="kpiDeviations">Deviations (nb)</label>
+          <input type="number" id="kpiDeviations" min="0" step="1" />
+        </div>
+      </div>
+
+      <!-- Ligne KPI 3 -->
+      <div class="modal-grid-3">
+        <div class="modal-field">
+          <label for="kpiEscalations">Escalations (nb)</label>
+          <input type="number" id="kpiEscalations" min="0" step="1" />
+        </div>
+        <div class="modal-field">
+          <label for="kpiDce">DCE (%)</label>
+          <input type="number" id="kpiDce" min="0" max="100" step="0.1" />
+        </div>
+        <div class="modal-field">
+          <label for="kpiMaturity">Maturity (%)</label>
+          <input type="number" id="kpiMaturity" min="0" max="100" step="0.1" />
+        </div>
+      </div>
+
+      <!-- Verrouillage -->
+      <div class="modal-lock-row">
+        <label class="checkbox-label">
+          <input type="checkbox" id="kpiLocked" />
+          Ne pas écraser avec l’import Excel (verrouiller ce mois/WP)
+        </label>
+      </div>
+
+      <!-- Boutons -->
+      <div class="modal-actions">
+        <button type="button" class="btn-ghost" id="btnCancelModalKpi">
+          Annuler
+        </button>
+        <button type="submit" class="btn-primary">
+          💾 Enregistrer les KPI
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<input type="file"
+       id="inputExcelFile"
+       accept=".xlsx"
+       style="display:none" />
+
+<!-- Librairie XLSX pour export Excel -->
+<!-- Librairie XLSX pour export / import Excel -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<!-- Librairie Chart.js pour les graphiques -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- JS (placeholder pour la suite) -->
+  <script>
+  // ============================
+  // 🧠 CONFIG GLOBALE & CONSTANTES
+  // ============================
+
+  // Liste standard des clés KPI
+  const KPI_KEYS = [
+    "sla",
+    "bugsK1",
+    "bugsK2",
+    "risks",
+    "deliveryCompliance",
+    "deviations",
+    "escalations",
+    "dce",
+    "maturity",
+  ];
+// Stockage des instances Chart.js
+const charts = {
+  kpiEvolution: null,
+};
+
+  // État de l'application (filtres, mode, etc.)
+  const appState = {
+    filters: {
+      wp: "ALL",   // "ALL", "WP1", "WP2"...
+      year: 2025,  // ex: 2025
+      month: null, // 1..12 ou null pour "tous"
+    },
+    mode: "excel", // "excel" ou "manual"
+  };
+
+  // ============================
+  // 📊 STRUCTURE DE DONNÉES
+  // ============================
+  //
+  // 1. manualKpis : valeurs saisies manuellement (par WP / année / mois)
+  // 2. excelKpis  : valeurs calculées à partir de l'import Excel (agrégées)
+  //
+  // Chaque enregistrement KPI suit cette forme :
+  // {
+  //   wp: "WP1",
+  //   year: 2025,
+  //   month: 1,           // 1 = Janvier
+  //   sla: 99.2,
+  //   bugsK1: 0,
+  //   bugsK2: 3,
+  //   risks: 1,
+  //   deliveryCompliance: 97.5,
+  //   deviations: 2,
+  //   escalations: 0,
+  //   dce: 93.0,
+  //   maturity: 82.0,
+  //   source: "manual" | "excel",
+  //   locked: false       // pour éviter d'écraser les valeurs manuelles
+  // }
+
+  const appData = {
+    manualKpis: [
+      // 🔹 Exemples de données de démo (tu peux les supprimer ensuite)
+      {
+        wp: "WP1",
+        year: 2025,
+        month: 1,
+        sla: 99.2,
+        bugsK1: 0,
+        bugsK2: 3,
+        risks: 1,
+        deliveryCompliance: 98.0,
+        deviations: 1,
+        escalations: 0,
+        dce: 93.0,
+        maturity: 82.0,
+        source: "manual",
+        locked: false,
+      },
+      {
+        wp: "WP2",
+        year: 2025,
+        month: 1,
+        sla: 97.5,
+        bugsK1: 1,
+        bugsK2: 6,
+        risks: 2,
+        deliveryCompliance: 95.0,
+        deviations: 3,
+        escalations: 1,
+        dce: 88.0,
+        maturity: 76.0,
+        source: "manual",
+        locked: false,
+      },
+    ],
+    excelKpis: [
+      // rempli plus tard à partir du fichier Excel (agrégation)
+    ],
+  };
+
+  // ============================
+  // 🧩 HELPERS STRUCTURE KPI
+  // ============================
+
+  /**
+   * Crée un enregistrement KPI vide pour un WP / année / mois donné.
+   * Tous les KPI sont initialisés à 0.
+   */
+  function createEmptyKpiRecord({ wp, year, month, source = "manual", locked = false }) {
+    const base = {
+      wp,
+      year,
+      month,
+      source,
+      locked,
+    };
+    KPI_KEYS.forEach((key) => {
+      base[key] = 0;
+    });
+    return base;
+  }
+
+  /**
+   * Retourne le dataset actif selon le mode choisi :
+   * - "manual" => appData.manualKpis
+   * - "excel"  => appData.excelKpis
+   */
+  function getActiveDataset() {
+    return appState.mode === "manual" ? appData.manualKpis : appData.excelKpis;
+  }
+
+  /**
+   * Met à jour un enregistrement KPI (ou le crée) dans manualKpis.
+   * Utilisé plus tard par la saisie manuelle / import JSON, etc.
+   */
+  function upsertManualKpi(record) {
+    const idx = appData.manualKpis.findIndex(
+      (r) => r.wp === record.wp && r.year === record.year && r.month === record.month
+    );
+
+    if (idx === -1) {
+      appData.manualKpis.push(record);
+    } else {
+      // Si la ligne existante est "locked", on ne l'écrase pas
+      if (appData.manualKpis[idx].locked) return;
+      appData.manualKpis[idx] = { ...appData.manualKpis[idx], ...record };
+    }
+  }
+
+  /**
+   * Remplace complètement les excelKpis par un nouveau tableau
+   * (résultat de l'agrégation Excel par WP / année / mois).
+   */
+  function setExcelKpis(kpiArray) {
+    appData.excelKpis = [...kpiArray];
+  }
+
+  // ============================
+  // 🔍 GESTION DES FILTRES
+  // ============================
+
+  // Récupération des éléments de filtre dans le DOM
+  const filterWPSelect = document.getElementById("filterWP");
+  const filterYearSelect = document.getElementById("filterYear");
+  const filterMonthInput = document.getElementById("filterMonth");
+  const filterModeSelect = document.getElementById("filterMode");
+
+  /**
+   * Convertit un input type="month" (ex: "2025-01")
+   * en { year: 2025, month: 1 }
+   */
+  function parseMonthInput(value) {
+    if (!value) return { year: null, month: null };
+    const [y, m] = value.split("-").map((v) => parseInt(v, 10));
+    if (Number.isNaN(y) || Number.isNaN(m)) return { year: null, month: null };
+    return { year: y, month: m };
+  }
+
+  /**
+   * Recalcule appState.filters à partir du DOM
+   * puis relance le rafraîchissement du dashboard.
+   */
+  function applyFiltersFromUI() {
+  // WP
+  appState.filters.wp = filterWPSelect.value;
+
+  // Mode KPI (source)
+  appState.mode = filterModeSelect.value === "manual" ? "manual" : "excel";
+
+  // Année (select) → c'est la source unique de "year"
+  const yearVal = parseInt(filterYearSelect.value, 10);
+  appState.filters.year = Number.isNaN(yearVal) ? null : yearVal;
+
+  // Mois (input type="month" → valeur "YYYY-MM")
+  if (filterMonthInput && filterMonthInput.value) {
+    const raw = filterMonthInput.value.trim();   // ex: "2025-02"
+    let monthNum = null;
+
+    if (raw.includes("-")) {
+      const parts = raw.split("-");
+      const mStr = parts[1] || parts[0];
+      monthNum = parseInt(mStr, 10);
+    } else {
+      monthNum = parseInt(raw, 10);
+    }
+
+    appState.filters.month = Number.isNaN(monthNum) ? null : monthNum;
+  } else {
+    appState.filters.month = null;
+  }
+
+  refreshDashboard();
+}
+
+
+  /**
+   * Filtre le dataset actif selon les filtres WP / année / mois.
+   */
+  function getFilteredKpiRecords() {
+    const dataset = getActiveDataset();
+    const { wp, year, month } = appState.filters;
+
+    return dataset.filter((rec) => {
+      if (wp !== "ALL" && rec.wp !== wp) return false;
+      if (year !== null && rec.year !== year) return false;
+      if (month !== null && rec.month !== month) return false;
+      return true;
+    });
+  }
+
+  // ============================
+  // 📈 AGGRÉGATION POUR LES CARTES KPI
+  // ============================
+
+  /**
+   * Calcule les KPI globaux (pour les cartes en haut)
+   * à partir des enregistrements filtrés.
+   * Renvoie un objet du style :
+   * { sla: 98.5, bugsK1: 2, ... }
+   */
+  function computeGlobalKpis() {
+    const records = getFilteredKpiRecords();
+    const result = {};
+    KPI_KEYS.forEach((key) => {
+      result[key] = 0;
+    });
+
+    if (records.length === 0) {
+        console.log("Filtered records:", getFilteredKpiRecords());
+console.log("Computed KPIs:", result);
+
+      return result;
+    }
+
+    // Hypothèse simple de départ :
+    // - KPI de type "taux" (%) => moyenne
+    // - KPI de type "nombre" (bugs, risks, deviations, escalations) => somme
+    //
+    // Tu pourras ajuster la logique KPI par KPI ensuite.
+    let sumRateKeys = {
+      sla: 0,
+      deliveryCompliance: 0,
+      dce: 0,
+      maturity: 0,
+    };
+    let countRate = {
+      sla: 0,
+      deliveryCompliance: 0,
+      dce: 0,
+      maturity: 0,
+    };
+
+    let sumCountKeys = {
+      bugsK1: 0,
+      bugsK2: 0,
+      risks: 0,
+      deviations: 0,
+      escalations: 0,
+    };
+
+    records.forEach((rec) => {
+      // Pourcentages
+      ["sla", "deliveryCompliance", "dce", "maturity"].forEach((key) => {
+        if (typeof rec[key] === "number") {
+          sumRateKeys[key] += rec[key];
+          countRate[key] += 1;
+        }
+      });
+
+      // Nombres (compteurs)
+      ["bugsK1", "bugsK2", "risks", "deviations", "escalations"].forEach((key) => {
+        if (typeof rec[key] === "number") {
+          sumCountKeys[key] += rec[key];
+        }
+      });
+    });
+
+    // Moyennes des taux
+    Object.keys(sumRateKeys).forEach((key) => {
+      result[key] =
+        countRate[key] > 0 ? sumRateKeys[key] / countRate[key] : 0;
+    });
+
+    // Sommes des compteurs
+    Object.keys(sumCountKeys).forEach((key) => {
+      result[key] = sumCountKeys[key];
+    });
+
+    return result;
+  }
+// ============================
+// 📈 SÉRIE TEMPORELLE KPI (PAR MOIS)
+// ============================
+
+/**
+ * Construit des séries mensuelles pour SLA / Delivery / DCE / Maturity
+ * en fonction du WP et de l'année sélectionnés.
+ * NB : on ignore appState.filters.month pour le graphique :
+ *      on affiche toujours la vue annuelle.
+ */
+function buildKpiTimeSeries() {
+  const dataset = getActiveDataset();
+  const { wp, year } = appState.filters;
+
+  const filtered = dataset.filter((rec) => {
+    if (wp !== "ALL" && rec.wp !== wp) return false;
+    if (year !== null && rec.year !== year) return false;
+    return true;
+  });
+
+  // Map "YYYY-MM" -> agrégats
+  const monthMap = new Map();
+
+  filtered.forEach((rec) => {
+    if (!rec.year || !rec.month) return;
+    const label = `${rec.year}-${String(rec.month).padStart(2, "0")}`;
+
+    if (!monthMap.has(label)) {
+      monthMap.set(label, {
+        slaSum: 0,
+        slaCount: 0,
+        deliverySum: 0,
+        deliveryCount: 0,
+        dceSum: 0,
+        dceCount: 0,
+        maturitySum: 0,
+        maturityCount: 0,
+      });
+    }
+
+    const agg = monthMap.get(label);
+
+    if (typeof rec.sla === "number") {
+      agg.slaSum += rec.sla;
+      agg.slaCount += 1;
+    }
+    if (typeof rec.deliveryCompliance === "number") {
+      agg.deliverySum += rec.deliveryCompliance;
+      agg.deliveryCount += 1;
+    }
+    if (typeof rec.dce === "number") {
+      agg.dceSum += rec.dce;
+      agg.dceCount += 1;
+    }
+    if (typeof rec.maturity === "number") {
+      agg.maturitySum += rec.maturity;
+      agg.maturityCount += 1;
+    }
+  });
+
+  const labels = Array.from(monthMap.keys()).sort(); // "2025-01", "2025-02", ...
+
+  const sla = [];
+  const delivery = [];
+  const dce = [];
+  const maturity = [];
+
+  labels.forEach((label) => {
+    const agg = monthMap.get(label);
+
+    sla.push(agg.slaCount ? agg.slaSum / agg.slaCount : 0);
+    delivery.push(agg.deliveryCount ? agg.deliverySum / agg.deliveryCount : 0);
+    dce.push(agg.dceCount ? agg.dceSum / agg.dceCount : 0);
+    maturity.push(agg.maturityCount ? agg.maturitySum / agg.maturityCount : 0);
+  });
+
+  return { labels, sla, delivery, dce, maturity };
+}
+// ============================
+// 🖼 MISE À JOUR GRAPHIQUE KPI
+// ============================
+
+function updateKpiChart() {
+  const canvas = document.getElementById("chartKpiEvolution");
+  if (!canvas) return;
+
+  const series = buildKpiTimeSeries();
+
+  // Si pas de données, on peut vider le graph
+  if (series.labels.length === 0) {
+    if (charts.kpiEvolution) {
+      charts.kpiEvolution.data.labels = [];
+      charts.kpiEvolution.data.datasets.forEach((ds) => (ds.data = []));
+      charts.kpiEvolution.update();
+    }
+    return;
+  }
+
+  if (!charts.kpiEvolution) {
+    charts.kpiEvolution = new Chart(canvas.getContext("2d"), {
+      type: "line",
+      data: {
+        labels: series.labels,
+        datasets: [
+          {
+            label: "SLA (%)",
+            data: series.sla,
+            borderColor: "#35c6ff",
+            backgroundColor: "rgba(53, 198, 255, 0.12)",
+            borderWidth: 2,
+            tension: 0.35,
+            pointRadius: 3,
+            pointHoverRadius: 4,
+          },
+          {
+            label: "Delivery Compliance (%)",
+            data: series.delivery,
+            borderColor: "#41f3a3",
+            backgroundColor: "rgba(65, 243, 163, 0.12)",
+            borderWidth: 2,
+            tension: 0.35,
+            pointRadius: 3,
+            pointHoverRadius: 4,
+          },
+          {
+            label: "DCE (%)",
+            data: series.dce,
+            borderColor: "#ffc107",
+            backgroundColor: "rgba(255, 193, 7, 0.12)",
+            borderWidth: 2,
+            tension: 0.35,
+            pointRadius: 3,
+            pointHoverRadius: 4,
+          },
+          {
+            label: "Maturity (%)",
+            data: series.maturity,
+            borderColor: "#ff4e8a",
+            backgroundColor: "rgba(255, 78, 138, 0.12)",
+            borderWidth: 2,
+            tension: 0.35,
+            pointRadius: 3,
+            pointHoverRadius: 4,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: {
+              color: "#f5f7ff",
+              font: { size: 10 },
+            },
+          },
+          tooltip: {
+            mode: "index",
+            intersect: false,
+            callbacks: {
+              label: (ctx) => {
+                const v = ctx.parsed.y;
+                return `${ctx.dataset.label}: ${v.toFixed(1)} %`;
+              },
+            },
+          },
+        },
+        interaction: {
+          mode: "index",
+          intersect: false,
+        },
+        scales: {
+          x: {
+            ticks: {
+              color: "#9ca6d6",
+              maxRotation: 45,
+              minRotation: 0,
+            },
+            grid: {
+              color: "rgba(255, 255, 255, 0.04)",
+            },
+          },
+          y: {
+            beginAtZero: true,
+            suggestedMax: 100,
+            ticks: {
+              color: "#9ca6d6",
+              callback: (val) => `${val}%`,
+            },
+            grid: {
+              color: "rgba(255, 255, 255, 0.04)",
+            },
+          },
+        },
+      },
+    });
+  } else {
+    const chart = charts.kpiEvolution;
+    chart.data.labels = series.labels;
+    chart.data.datasets[0].data = series.sla;
+    chart.data.datasets[1].data = series.delivery;
+    chart.data.datasets[2].data = series.dce;
+    chart.data.datasets[3].data = series.maturity;
+    chart.update();
+  }
+}
+
+  // ============================
+  // 🎯 MISE À JOUR DU DASHBOARD (HOOKS)
+  // ============================
+
+  /**
+   * Met à jour les valeurs affichées sur les cards KPI.
+   * (On branchera ça sur les IDs déjà présents dans le HTML)
+   */
+  function updateKpiCards() {
+    const k = computeGlobalKpis();
+
+    const elSLA = document.getElementById("kpiSLA");
+    const elBugsK1 = document.getElementById("kpiBugsK1");
+    const elBugsK2 = document.getElementById("kpiBugsK2");
+    const elRisks = document.getElementById("kpiRisks");
+    const elDelivery = document.getElementById("kpiDeliveryCompliance");
+    const elDeviations = document.getElementById("kpiDeviations");
+    const elEscalations = document.getElementById("kpiEscalations");
+    const elDCE = document.getElementById("kpiDCE");
+    const elMaturity = document.getElementById("kpiMaturity");
+
+    if (elSLA) elSLA.textContent = k.sla.toFixed(1);
+    if (elBugsK1) elBugsK1.textContent = k.bugsK1.toString();
+    if (elBugsK2) elBugsK2.textContent = k.bugsK2.toString();
+    if (elRisks) elRisks.textContent = k.risks.toString();
+    if (elDelivery) elDelivery.textContent = k.deliveryCompliance.toFixed(1);
+    if (elDeviations) elDeviations.textContent = k.deviations.toString();
+    if (elEscalations) elEscalations.textContent = k.escalations.toString();
+    if (elDCE) elDCE.textContent = k.dce.toFixed(1);
+    if (elMaturity) elMaturity.textContent = k.maturity.toFixed(1);
+  }
+
+  /**
+   * Rafraîchissement global du dashboard.
+   * Plus tard, on ajoutera ici :
+   * - mise à jour des graphiques
+   * - mise à jour du tableau WP
+   * - mise à jour du "Last refresh"
+   */
+  function refreshDashboard() {
+  updateKpiCards();
+  updateKpiChart();
+  // TODO: updateWpTable();
+  updateLastRefreshLabel();
+}
+
+
+  function updateLastRefreshLabel() {
+    const footer = document.querySelector(".footer-bar span strong");
+    if (!footer) return;
+    const now = new Date();
+    footer.textContent = now.toLocaleString("fr-FR");
+  }
+
+  // ============================
+  // 🔗 LIEN UI <-> STATE
+  // ============================
+
+  // Boutons "Apply Filters" & "Reset"
+  const applyFiltersBtn = document.querySelector(".btn-chip span.dot")?.parentElement;
+  const resetBtn = document.querySelectorAll(".btn-chip")[1];
+
+  if (filterWPSelect) {
+    filterWPSelect.addEventListener("change", applyFiltersFromUI);
+  }
+  if (filterYearSelect) {
+    filterYearSelect.addEventListener("change", applyFiltersFromUI);
+  }
+  if (filterMonthInput) {
+    filterMonthInput.addEventListener("change", applyFiltersFromUI);
+  }
+  if (filterModeSelect) {
+    filterModeSelect.addEventListener("change", applyFiltersFromUI);
+  }
+
+  if (applyFiltersBtn) {
+    applyFiltersBtn.addEventListener("click", applyFiltersFromUI);
+  }
+
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      // Reset des filtres à l'état initial
+      appState.filters.wp = "ALL";
+      appState.filters.year = 2025;
+      appState.filters.month = null;
+      appState.mode = "excel";
+
+      if (filterWPSelect) filterWPSelect.value = "ALL";
+      if (filterYearSelect) filterYearSelect.value = "2025";
+      if (filterMonthInput) filterMonthInput.value = "";
+      if (filterModeSelect) filterModeSelect.value = "excel";
+
+      refreshDashboard();
+    });
+  }
+  // Boutons d'export / import / refresh
+const btnExportJson = document.getElementById("btnExportJson");
+const btnExportExcel = document.getElementById("btnExportExcel");
+const btnRefresh = document.getElementById("btnRefresh");
+const btnImportExcel = document.getElementById("btnImportExcel");
+const excelFileInput = document.getElementById("inputExcelFile");
+
+if (btnExportJson) {
+  btnExportJson.addEventListener("click", exportToJson);
+}
+
+if (btnExportExcel) {
+  btnExportExcel.addEventListener("click", exportToExcel);
+}
+
+if (btnRefresh) {
+  btnRefresh.addEventListener("click", () => {
+    refreshDashboard();
+  });
+}
+
+if (btnImportExcel && excelFileInput) {
+  btnImportExcel.addEventListener("click", () => {
+    excelFileInput.click();
+  });
+
+  excelFileInput.addEventListener("change", () => {
+    const file = excelFileInput.files[0];
+    if (file) {
+      handleExcelFile(file);
+    }
+    // permet de re-sélectionner le même fichier plus tard si besoin
+    excelFileInput.value = "";
+  });
+}
+
+  
+// ============================
+// 📝 MODALE SAISIE KPI MANUEL
+// ============================
+
+const modalKpi = document.getElementById("modalKpi");
+const modalKpiForm = document.getElementById("modalKpiForm");
+const btnOpenModalKpi = document.getElementById("btnOpenModalKpi");
+const btnCloseModalKpi = document.getElementById("btnCloseModalKpi");
+const btnCancelModalKpi = document.getElementById("btnCancelModalKpi");
+
+function openKpiModal() {
+  if (!modalKpi) return;
+
+  // Pré-remplir WP / année / mois depuis les filtres
+  const wpSelect = document.getElementById("kpiWp");
+  const yearInput = document.getElementById("kpiYear");
+  const monthInput = document.getElementById("kpiMonth");
+
+  if (wpSelect && filterWPSelect) {
+    wpSelect.value = filterWPSelect.value !== "ALL" ? filterWPSelect.value : "";
+  }
+  if (yearInput && appState.filters.year) {
+    yearInput.value = appState.filters.year;
+  }
+  if (monthInput && appState.filters.month) {
+  monthInput.value = String(appState.filters.month);
+} else if (monthInput) {
+  monthInput.value = "";
+}
+
+
+  modalKpi.classList.add("open");
+}
+
+function closeKpiModal() {
+  if (!modalKpi || !modalKpiForm) return;
+  modalKpi.classList.remove("open");
+  modalKpiForm.reset();
+}
+
+// Ouverture
+if (btnOpenModalKpi) {
+  btnOpenModalKpi.addEventListener("click", openKpiModal);
+}
+
+// Fermeture via X ou Annuler
+[btnCloseModalKpi, btnCancelModalKpi].forEach((btn) => {
+  if (btn) btn.addEventListener("click", closeKpiModal);
+});
+
+// Fermeture en cliquant sur le fond
+if (modalKpi) {
+  modalKpi.addEventListener("click", (e) => {
+    if (e.target === modalKpi) {
+      closeKpiModal();
+    }
+  });
+}
+
+// Soumission du formulaire
+// ============================
+// 📝 MODALE SAISIE KPI MANUEL – SUBMIT SIMPLE
+// ============================
+
+if (modalKpiForm) {
+  modalKpiForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const wp = document.getElementById("kpiWp").value;
+    const yearStr = document.getElementById("kpiYear").value;
+    const monthStr = document.getElementById("kpiMonth").value;
+    const locked = document.getElementById("kpiLocked").checked;
+
+    const year = Number(yearStr);
+    const month = Number(monthStr);
+
+    // Vérifications basiques
+    if (!wp || wp === "ALL") {
+      alert("Merci de sélectionner un Work Package.");
+      return;
+    }
+    if (!yearStr || Number.isNaN(year)) {
+      alert("Merci de saisir une année valide.");
+      return;
+    }
+    if (!monthStr || Number.isNaN(month) || month < 1 || month > 12) {
+      alert("Merci de saisir un mois entre 1 et 12.");
+      return;
+    }
+
+    // Record de base : tous les KPI à 0
+    const record = createEmptyKpiRecord({
+      wp,
+      year,
+      month,
+      source: "manual",
+      locked,
+    });
+
+    // Helper pour lire un champ numérique
+    const readNumber = (id) => {
+  const el = document.getElementById(id);
+  if (!el || typeof el.value === "undefined") return 0;
+
+  const v = String(el.value).trim();
+  if (v === "") return 0;
+
+  const n = Number(v);
+  return Number.isNaN(n) ? 0 : n;
+};
+
+
+
+    // Remplissage des KPI
+    record.sla                = readNumber("kpiSla");
+    record.bugsK1             = readNumber("kpiBugsK1");
+    record.bugsK2             = readNumber("kpiBugsK2");
+    record.risks              = readNumber("kpiRisks");
+    record.deliveryCompliance = readNumber("kpiDelivery");
+    record.deviations         = readNumber("kpiDeviations");
+    record.escalations        = readNumber("kpiEscalations");
+    record.dce                = readNumber("kpiDce");
+    record.maturity           = readNumber("kpiMaturity");
+
+    console.log("New manual KPI record:", record);
+
+    // Insert / update dans manualKpis
+    upsertManualKpi(record);
+
+    // On passe en mode manuel
+    appState.mode = "manual";
+    if (filterModeSelect) filterModeSelect.value = "manual";
+
+    // Rafraîchissement du dashboard
+    refreshDashboard();
+
+    // Fermer la modale
+    closeKpiModal();
+  });
+}
+
+
+// ============================
+// 📤 EXPORT JSON & EXCEL
+// ============================
+
+/**
+ * Construit une ligne "plate" pour Excel à partir
+ * d'un enregistrement KPI brut (manualKpis / excelKpis).
+ */
+function buildKpiRowForExport(rec) {
+  // sécurité : on force les valeurs numériques ou chaîne vide
+  const safe = (v) => (v == null ? "" : v);
+
+  return {
+    WP: safe(rec.wp),
+    Year: safe(rec.year),
+    Month: safe(rec.month),             // 1..12
+    SLA: safe(rec.sla),
+    "Bugs K1": safe(rec.bugsK1),
+    "Bugs K2": safe(rec.bugsK2),
+    Risks: safe(rec.risks),
+    "Delivery Compliance": safe(rec.deliveryCompliance),
+    Deviations: safe(rec.deviations),
+    Escalations: safe(rec.escalations),
+    DCE: safe(rec.dce),
+    Maturity: safe(rec.maturity),
+    Source: safe(rec.source || "manual"),
+    Locked: rec.locked ? "Yes" : "No",
+  };
+}
+
+
+/**
+ * Génère un timestamp compact pour le nom de fichier.
+ * Exemple : 2025-12-02_19-45-10
+ */
+function buildFileTimestamp() {
+  const now = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  const yyyy = now.getFullYear();
+  const mm = pad(now.getMonth() + 1);
+  const dd = pad(now.getDate());
+  const hh = pad(now.getHours());
+  const mi = pad(now.getMinutes());
+  const ss = pad(now.getSeconds());
+  return `${yyyy}-${mm}-${dd}_${hh}-${mi}-${ss}`;
+}
+
+/**
+ * Export JSON complet (manualKpis + excelKpis + meta + filtres).
+ */
+function exportToJson() {
+  const dataToExport = {
+    meta: {
+      generatedAt: new Date().toISOString(),
+      mode: appState.mode,
+      filters: appState.filters,
+      kpiKeys: KPI_KEYS,
+    },
+    manualKpis: appData.manualKpis,
+    excelKpis: appData.excelKpis,
+  };
+
+  const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {
+    type: "application/json",
+  });
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `quality-kpi-dashboard-${buildFileTimestamp()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/**
+ * Export Excel :
+ * - Feuille "Manual_KPIs" = appData.manualKpis
+ * - Feuille "Excel_KPIs"  = appData.excelKpis
+ */
+function exportToExcel() {
+  if (typeof XLSX === "undefined") {
+    alert("Librairie XLSX non chargée. Vérifie le <script> dans le <head>.");
+    return;
+  }
+
+  const wb = XLSX.utils.book_new();
+
+  // Feuille 1 : Manual_KPIs
+  const manualRows = appData.manualKpis.map(buildKpiRowForExport);
+  const wsManual = XLSX.utils.json_to_sheet(manualRows);
+  XLSX.utils.book_append_sheet(wb, wsManual, "Manual_KPIs");
+
+  // Feuille 2 : Excel_KPIs (si tu les utilises plus tard)
+  const excelRows = appData.excelKpis.map(buildKpiRowForExport);
+  const wsExcel = XLSX.utils.json_to_sheet(excelRows);
+  XLSX.utils.book_append_sheet(wb, wsExcel, "Excel_KPIs");
+
+  const fileName = `quality-kpi-dashboard-${buildFileTimestamp()}.xlsx`;
+  XLSX.writeFile(wb, fileName);
+}
+
+  // Init au chargement
+  document.addEventListener("DOMContentLoaded", () => {
+    refreshDashboard();
+  });
+  // ============================
+// ⤓ IMPORT EXCEL → excelKpis
+// ============================
+
+/**
+ * Normalise un nom de colonne Excel :
+ * - trim
+ * - minuscules
+ * - suppression des espaces & underscores
+ *   ex: "Bugs K1" -> "bugsk1"
+ */
+function normalizeHeaderName(name) {
+  if (!name) return "";
+  return String(name).trim().toLowerCase().replace(/[\s_]+/g, "");
+}
+
+/**
+ * Cherche l'index d'une colonne à partir d'une liste
+ * de variantes possibles.
+ */
+function findColumnIndex(headerRow, variants) {
+  const normalizedHeader = headerRow.map(normalizeHeaderName);
+  for (let i = 0; i < normalizedHeader.length; i++) {
+    if (variants.includes(normalizedHeader[i])) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+/**
+ * Parse un fichier Excel et remplit appData.excelKpis
+ */
+function handleExcelFile(file) {
+  if (!file) return;
+  if (typeof XLSX === "undefined") {
+    alert("Librairie XLSX non chargée. Vérifie le <script XLSX> dans le <head>.");
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = (e) => {
+    const data = new Uint8Array(e.target.result);
+    const workbook = XLSX.read(data, { type: "array" });
+
+    if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
+      alert("Aucune feuille trouvée dans le fichier Excel.");
+      return;
+    }
+
+    // On essaye de prendre une feuille "KPIs" si elle existe, sinon la première
+    let sheetName = workbook.SheetNames[0];
+    const preferred = workbook.SheetNames.find(
+      (name) => normalizeHeaderName(name) === "kpis"
+    );
+    if (preferred) sheetName = preferred;
+
+    const ws = workbook.Sheets[sheetName];
+    if (!ws) {
+      alert(`Feuille "${sheetName}" introuvable.`);
+      return;
+    }
+
+    // lecture brut (header ligne 0)
+    const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null });
+
+    if (!rows || rows.length < 2) {
+      alert("La feuille Excel ne contient pas de données exploitables (au moins un header + 1 ligne).");
+      return;
+    }
+
+    const headerRow = rows[0];
+
+    // Mapping des colonnes
+    const colWP = findColumnIndex(headerRow, ["wp", "workpackage"]);
+    const colYear = findColumnIndex(headerRow, ["year", "annee"]);
+    const colMonth = findColumnIndex(headerRow, ["month", "mois"]);
+    const colSLA = findColumnIndex(headerRow, ["sla"]);
+    const colBugsK1 = findColumnIndex(headerRow, ["bugsk1", "bugsk1", "bugsk1"]);
+    const colBugsK2 = findColumnIndex(headerRow, ["bugsk2", "bugsk2", "bugsk2"]);
+    const colRisks = findColumnIndex(headerRow, ["risks", "risk"]);
+    const colDelivery = findColumnIndex(headerRow, ["deliverycompliance", "delivery", "deliverycompliance%"]);
+    const colDeviations = findColumnIndex(headerRow, ["deviations", "deviation"]);
+    const colEscalations = findColumnIndex(headerRow, ["escalations", "escalation"]);
+    const colDCE = findColumnIndex(headerRow, ["dce"]);
+    const colMaturity = findColumnIndex(headerRow, ["maturity", "maturite"]);
+    const colLocked = findColumnIndex(headerRow, ["locked", "lock", "verrou", "verrouille"]);
+    const colSource = findColumnIndex(headerRow, ["source"]);
+
+    if (colWP === -1 || colYear === -1 || colMonth === -1) {
+      alert(
+        "Impossible de trouver les colonnes WP / Year / Month.\n" +
+        "Vérifie que ton Excel contient au moins les colonnes : WP, Year, Month."
+      );
+      return;
+    }
+
+    const newExcelKpis = [];
+
+    // Parcours des lignes de données
+    for (let i = 1; i < rows.length; i++) {
+      const row = rows[i];
+      if (!row || row.length === 0) continue;
+
+      const rawWp = row[colWP];
+      const rawYear = row[colYear];
+      const rawMonth = row[colMonth];
+
+      if (!rawWp || rawYear === null || rawYear === undefined || rawMonth === null || rawMonth === undefined) {
+        // ligne incomplète => on ignore
+        continue;
+      }
+
+      const wp = String(rawWp).trim();
+      const year = parseInt(rawYear, 10);
+
+      let month;
+      if (typeof rawMonth === "number") {
+        month = rawMonth;           // ex: 1..12
+      } else {
+        const mStr = String(rawMonth).trim();
+        if (/^\d{4}-\d{2}$/.test(mStr)) {
+          // format "2025-01"
+          month = parseInt(mStr.split("-")[1], 10);
+        } else {
+          // ex: "1" ou "01"
+          month = parseInt(mStr, 10);
+        }
+      }
+
+      if (!wp || Number.isNaN(year) || Number.isNaN(month)) {
+        continue;
+      }
+
+      const rec = createEmptyKpiRecord({
+        wp,
+        year,
+        month,
+        source: "excel",
+        locked: false,
+      });
+
+      const readNumeric = (colIndex) => {
+        if (colIndex === -1) return 0;
+        const v = row[colIndex];
+        if (v === null || v === undefined || v === "") return 0;
+        const n = parseFloat(v);
+        return Number.isNaN(n) ? 0 : n;
+      };
+
+      rec.sla = readNumeric(colSLA);
+      rec.bugsK1 = readNumeric(colBugsK1);
+      rec.bugsK2 = readNumeric(colBugsK2);
+      rec.risks = readNumeric(colRisks);
+      rec.deliveryCompliance = readNumeric(colDelivery);
+      rec.deviations = readNumeric(colDeviations);
+      rec.escalations = readNumeric(colEscalations);
+      rec.dce = readNumeric(colDCE);
+      rec.maturity = readNumeric(colMaturity);
+
+      // Locked ?
+      if (colLocked !== -1) {
+        const v = row[colLocked];
+        if (typeof v === "string") {
+          const nv = v.trim().toLowerCase();
+          rec.locked = nv === "yes" || nv === "true" || nv === "1" || nv === "locked";
+        } else if (typeof v === "number") {
+          rec.locked = v === 1;
+        }
+      }
+
+      // Source forcée éventuellement
+      if (colSource !== -1) {
+        const s = row[colSource];
+        if (s) {
+          rec.source = String(s).trim().toLowerCase() || "excel";
+        }
+      }
+
+      newExcelKpis.push(rec);
+    }
+
+    // Remplace le dataset excelKpis
+    setExcelKpis(newExcelKpis);
+
+    // Basculer en mode "excel" par défaut après import
+    appState.mode = "excel";
+    if (filterModeSelect) filterModeSelect.value = "excel";
+
+    refreshDashboard();
+
+    alert(`Import Excel réussi : ${newExcelKpis.length} enregistrements KPI chargés.`);
+  };
+
+  reader.onerror = () => {
+    alert("Erreur lors de la lecture du fichier Excel.");
+  };
+
+  reader.readAsArrayBuffer(file);
+}
+// === SIDEBAR TOGGLE ===
+const sidebar = document.querySelector(".sidebar");
+const toggleBtn = document.getElementById("toggleSidebar");
+
+toggleBtn.addEventListener("click", () => {
+  sidebar.classList.toggle("hidden");
+  document.body.classList.toggle("sidebar-hidden");
+});
+
+</script>
+
+</body>
+</html>
