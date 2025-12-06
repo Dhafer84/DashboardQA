@@ -1,4 +1,4 @@
-# 🚀 Quality KPI Dashboard – Futuristic Edition  
+# Quality KPI Dashboard – Futuristic Edition  
 ### 📊 Monitoring KPIs per Work Package · Month · Year (Real-Time Simulation Mode)
 
 Bienvenue dans **Dashboard QA**, un tableau de bord moderne, futuriste et ultra-fluide conçu pour les **Quality Engineers**, **Project Managers** et **DevOps/QA Leads**.
