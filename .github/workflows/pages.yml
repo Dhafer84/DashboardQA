@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-    validate-html:
+  validate-html:
     name: Validate HTML
     runs-on: ubuntu-latest
     steps:
@@ -23,6 +23,7 @@ jobs:
 
       - name: Run HTML validation
         run: html5validator --root .
+
 
 
   validate-css:
