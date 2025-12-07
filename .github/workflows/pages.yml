@@ -6,15 +6,24 @@ on:
   pull_request:
 
 jobs:
-  validate-html:
+    validate-html:
     name: Validate HTML
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: HTML Validator
-        uses: Cyb3r-Jak3/html5validator-action@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          root: ./
+          python-version: '3.x'
+
+      - name: Install html5validator
+        run: pip install html5validator
+
+      - name: Run HTML validation
+        run: html5validator --root .
+
 
   validate-css:
     name: Lint CSS
